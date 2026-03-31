@@ -1,4 +1,5 @@
 package com.exemplo.usuariosapi.controller;
+import com.exemplo.usuariosapi.UsuarioDTO.UsuarioDTO;
 import com.exemplo.usuariosapi.model.Usuario;
 import com.exemplo.usuariosapi.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ public class UsuarioController {
     private UsuarioService service;
 
     @GetMapping("/usuarios")
-    public List<Usuario> listar() {
+    public List<UsuarioDTO> listar() {
         return service.listar();
     }
 
