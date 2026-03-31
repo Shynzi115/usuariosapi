@@ -53,15 +53,9 @@ public class UsuarioService {
     public UsuarioDTO atualizar(Long id, UsuarioUpdateDTO dto) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() ->new RuntimeException("Usuario não encontrado."));
 
-        if (dto.getNome() != null){
-            usuario.setNome(dto.getNome());
-        }
-        if (dto.getEmail() != null){
-            usuario.setEmail(dto.getEmail());
-        }
-        if (dto.getSenha() != null){
-            usuario.setSenha(dto.getSenha());
-        }
+        if (dto.getNome() != null){usuario.setNome(dto.getNome());}
+        if (dto.getEmail() != null){usuario.setEmail(dto.getEmail());}
+        if (dto.getSenha() != null){usuario.setSenha(dto.getSenha());}
         usuario = usuarioRepository.save(usuario);
 
         return new UsuarioDTO(
