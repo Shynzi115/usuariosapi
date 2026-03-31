@@ -1,34 +1,36 @@
 package com.exemplo.usuariosapi.controller;
-import com.exemplo.usuariosapi.UsuarioDTO.UsuarioDTO;
+import com.exemplo.usuariosapi.dto.UsuarioCreateDTO;
+import com.exemplo.usuariosapi.dto.UsuarioDTO;
+import com.exemplo.usuariosapi.dto.UsuarioUpdateDTO;
 import com.exemplo.usuariosapi.model.Usuario;
 import com.exemplo.usuariosapi.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController
-public class UsuarioController {
-    @Autowired
-    private UsuarioService service;
+@RestController @RequestMapping("/usuarios")
+public class UsuarioController { private final UsuarioService usuarioService;
 
-    @GetMapping("/usuarios")
-    public List<UsuarioDTO> listar() {
-        return service.listar();
+    public UsuarioController(UsuarioService usuarioService){this.usuarioService = usuarioService;}
+
+    @GetMapping public List<UsuarioDTO> listar() {return usuarioService.listar();}
+
+    @GetMapping("/{id}") public Usuario buscarPorId(@PathVariable Long id){return usuarioService.buscarPorId(id);}
+
+    @PostMapping
+    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioCreateDTO dto){
+        UsuarioDTO usuario = usuarioService.criarUsuario(dto);
+        return ResponseEntity.status(201).body(usuario);
     }
 
-    @GetMapping("/usuarios/{id}")
-    public Usuario buscarPorId(@PathVariable Long id){return service.buscarPorId(id);}
-
-    @PostMapping("/usuarios")
-    public Usuario salvar(@RequestBody Usuario usuario) {
-        return service.salvar(usuario);
+    @DeleteMapping("/{id}") public ResponseEntity<Void> deletar(@PathVariable Long id){
+        usuarioService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/usuarios/{id}")
-    public void deletar(@PathVariable Long id){
-        service.deletar(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> atualizar (@PathVariable Long id, @RequestBody UsuarioUpdateDTO dto) {
+        UsuarioDTO usuario = usuarioService.atualizar(id, dto);
+        return ResponseEntity.ok(usuario);
     }
-
-    @PutMapping("/usuarios/{id}")
-    public Usuario atualizar (@PathVariable Long id, @RequestBody Usuario usuario){return service.atualizar(id, usuario);}
 }
