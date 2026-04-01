@@ -2,7 +2,10 @@ package com.exemplo.usuariosapi.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Usuario {
