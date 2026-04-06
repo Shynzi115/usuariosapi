@@ -16,6 +16,8 @@ public class Usuario {
     private String email;
     private String senha;
     private LocalDateTime dataCriacao;
+    @OneToMany(mappedBy = "usuario")
+    private List<Pedido> pedidos;
 
     public Long getId() {return id;}
 

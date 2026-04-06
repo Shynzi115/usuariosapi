@@ -10,11 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin(origins = "*")
 @RestController @RequestMapping("/usuarios")
-public class UsuarioController { private final UsuarioService usuarioService;
+public class UsuarioController {
+    private final UsuarioService usuarioService;
 
     public UsuarioController(UsuarioService usuarioService){this.usuarioService = usuarioService;}
     //Get para listar todos os usuarios do banco, com paginação
@@ -24,7 +23,9 @@ public class UsuarioController { private final UsuarioService usuarioService;
     }
 
     //Busca de usuarios com GET e PathVariable para buscar por id
-    @GetMapping("/{id}") public Usuario buscarPorId(@PathVariable Long id){return usuarioService.buscarPorId(id);}
+    @GetMapping("/{id}")
+    public Usuario buscarPorId(@PathVariable Long id){
+        return usuarioService.buscarPorId(id);}
 
     //Post para inserir usuarios
     @PostMapping
