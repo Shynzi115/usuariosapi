@@ -20,7 +20,8 @@ public class UsuarioService {
     public Page<Usuario> listar(String nome, Pageable pageable) {
 
         if (nome != null && !nome.isBlank()) {
-            return usuarioRepository.findByNomeContaining(nome, pageable);}
+            return usuarioRepository.findByNomeContaining(nome, pageable);
+        }
         return usuarioRepository.findAll(pageable);}
 
     //Metodo de busca por id
@@ -43,7 +44,9 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);}
 
     public UsuarioDTO atualizar(Long id, UsuarioUpdateDTO dto) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() ->new RuntimeException("Usuario não encontrado."));
+        Usuario usuario = usuarioRepository
+                .findById(id)
+                .orElseThrow(() ->new RuntimeException("Usuario não encontrado."));
 
         if (dto.getNome() != null){usuario.setNome(dto.getNome());}
         if (dto.getEmail() != null){usuario.setEmail(dto.getEmail());}

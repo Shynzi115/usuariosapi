@@ -1,11 +1,14 @@
 package com.exemplo.usuariosapi.service;
 
 import com.exemplo.usuariosapi.dto.PedidoCreateDTO;
+import com.exemplo.usuariosapi.enums.StatusPedido;
 import com.exemplo.usuariosapi.exception.UsuarioNaoEncontradoException;
 import com.exemplo.usuariosapi.model.Pedido;
 import com.exemplo.usuariosapi.model.Usuario;
 import com.exemplo.usuariosapi.repository.PedidoRepository;
 import com.exemplo.usuariosapi.repository.UsuarioRepository;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,11 +36,24 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Page<Pedido> listarPorUsuario(Long id, Pageable pageable){
-        return pedidoRepository.findById(id);
+    public Page<Pedido> listar(Long usuarioId, Pageable pageable) {
+
+        if (usuarioId != null) {
+            return pedidoRepository.findByUsuarioId(usuarioId, pageable);
+        }
+
+        return pedidoRepository.findAll(pageable);
     }
 
-    public Page<Pedido> listar(Long usuarioId, Pageable pageable){
-        return pedidoRepository.findAll(pageable);
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
+
+    public Pedido atualizarStatus(Long id, StatusPedido status){
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(()-> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatus(status);
+
+        return pedidoRepository.save(pedido);
+
     }
 }

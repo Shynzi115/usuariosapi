@@ -1,9 +1,13 @@
 package com.exemplo.usuariosapi.model;
 
+import com.exemplo.usuariosapi.enums.StatusPedido;
 import jakarta.persistence.*;
 
 @Entity
 public class Pedido {
+
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,5 +44,13 @@ public class Pedido {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public StatusPedido getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusPedido status) {
+        this.status = status;
     }
 }
