@@ -19,8 +19,7 @@ public class UsuarioController {
     //Get para listar todos os usuarios do banco, com paginação
     @GetMapping
     public Page<Usuario> listar(@RequestParam(required = false) String nome, Pageable pageable) {
-        return usuarioService.listar(nome, pageable);
-    }
+        return usuarioService.listar(nome, pageable);}
 
     //Busca de usuarios com GET e PathVariable para buscar por id
     @GetMapping("/{id}")

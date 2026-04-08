@@ -1,6 +1,8 @@
 package com.exemplo.usuariosapi.service;
 
 import com.exemplo.usuariosapi.dto.PedidoCreateDTO;
+import com.exemplo.usuariosapi.dto.PedidoResponseDTO;
+import com.exemplo.usuariosapi.dto.UsuarioResumoDTO;
 import com.exemplo.usuariosapi.enums.StatusPedido;
 import com.exemplo.usuariosapi.exception.UsuarioNaoEncontradoException;
 import com.exemplo.usuariosapi.model.Pedido;
@@ -23,9 +25,19 @@ public class PedidoService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    public PedidoResponseDTO toDTO(Pedido pedido){
+        UsuarioResumoDTO usuarioDTO = new UsuarioResumoDTO(
+                pedido.getUsuario().getId(),
+                pedido.getUsuario().getNome());
+        return new PedidoResponseDTO(
+                pedido.getId(),
+                pedido.getStatus(),
+                usuarioDTO
+        );
+    }
+
     public Pedido criar (PedidoCreateDTO dto){
-        Usuario usuario = usuarioRepository
-                .findById(dto.getUsuarioId())
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(
                         "Usuario "+ dto.getUsuarioId()+ " não encontrado."));
 
@@ -36,13 +48,9 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Page<Pedido> listar(Long usuarioId, Pageable pageable) {
-
-        if (usuarioId != null) {
-            return pedidoRepository.findByUsuarioId(usuarioId, pageable);
-        }
-
-        return pedidoRepository.findAll(pageable);
+    public Page<PedidoResponseDTO> listar(Pageable pageable) {
+        Page<Pedido> pedidos = pedidoRepository.findAll(pageable);
+        return pedidos.map(this::toDTO);
     }
 
     @Enumerated(EnumType.STRING)
