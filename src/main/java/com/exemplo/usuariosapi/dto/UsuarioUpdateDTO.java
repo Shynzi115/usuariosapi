@@ -1,8 +1,16 @@
 package com.exemplo.usuariosapi.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class UsuarioUpdateDTO {
+
+    @NotBlank(message = "Nome não pode ser vazio")
     private String nome;
+    @NotBlank(message = "E-mail não pode ser vazio")
     private String email;
+    @NotBlank(message = "Senha não pode ser vazio")
+    @Size(min = 6)
     private String senha;
 
     //Getters e Setters

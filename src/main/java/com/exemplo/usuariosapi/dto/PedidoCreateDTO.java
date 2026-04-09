@@ -1,8 +1,14 @@
 package com.exemplo.usuariosapi.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class PedidoCreateDTO {
 
+    @NotBlank(message = "A descrição não pode ser vazia")
     private String descricao;
+
+    @NotNull()
     private Long usuarioId;
 
     public String getDescricao() {

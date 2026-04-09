@@ -1,7 +1,15 @@
 package com.exemplo.usuariosapi.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class UsuarioDTO {
+
+    @NotNull
     private Long id;
+    @NotBlank(message = "Nome não pode ser vazio")
     private String nome;
+    @NotBlank(message = "E-mail não pode ser vazio")
     private String email;
 
     // Construtor
