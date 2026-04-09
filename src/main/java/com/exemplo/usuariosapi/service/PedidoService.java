@@ -4,13 +4,12 @@ import com.exemplo.usuariosapi.dto.PedidoCreateDTO;
 import com.exemplo.usuariosapi.dto.PedidoResponseDTO;
 import com.exemplo.usuariosapi.dto.UsuarioResumoDTO;
 import com.exemplo.usuariosapi.enums.StatusPedido;
+import com.exemplo.usuariosapi.exception.PedidoNaoEncontradoException;
 import com.exemplo.usuariosapi.exception.UsuarioNaoEncontradoException;
 import com.exemplo.usuariosapi.model.Pedido;
 import com.exemplo.usuariosapi.model.Usuario;
 import com.exemplo.usuariosapi.repository.PedidoRepository;
 import com.exemplo.usuariosapi.repository.UsuarioRepository;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class PedidoService {
         );
     }
 
-    public Pedido criar (PedidoCreateDTO dto){
+    public PedidoResponseDTO criar(PedidoCreateDTO dto){
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(
                         "Usuario "+ dto.getUsuarioId()+ " não encontrado."));
@@ -44,8 +43,9 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setDescricao(dto.getDescricao());
         pedido.setUsuario(usuario);
+        pedido.setStatus(StatusPedido.PENDENTE);
 
-        return pedidoRepository.save(pedido);
+        return toDTO(pedidoRepository.save(pedido));
     }
 
     public Page<PedidoResponseDTO> listar(Pageable pageable) {
@@ -53,15 +53,12 @@ public class PedidoService {
         return pedidos.map(this::toDTO);
     }
 
-    @Enumerated(EnumType.STRING)
-    private StatusPedido status;
-
-    public Pedido atualizarStatus(Long id, StatusPedido status){
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(()-> new RuntimeException("Pedido não encontrado"));
+    public PedidoResponseDTO atualizarStatus(Long id, StatusPedido status){
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(()-> new PedidoNaoEncontradoException("Pedido não encontrado"));
 
         pedido.setStatus(status);
 
-        return pedidoRepository.save(pedido);
+        return toDTO(pedidoRepository.save(pedido));
 
     }
 }

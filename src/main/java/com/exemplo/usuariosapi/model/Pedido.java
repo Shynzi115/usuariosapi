@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Entity
 public class Pedido {
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusPedido status;
 

@@ -5,6 +5,7 @@ import com.exemplo.usuariosapi.dto.PedidoResponseDTO;
 import com.exemplo.usuariosapi.dto.PedidoStatusDTO;
 import com.exemplo.usuariosapi.model.Pedido;
 import com.exemplo.usuariosapi.service.PedidoService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,8 @@ public class PedidoController {
         this.pedidoService = pedidoService;}
 
     @PostMapping
-    public ResponseEntity<Pedido> criar (@RequestBody PedidoCreateDTO dto){
-        Pedido pedido = pedidoService.criar(dto);
+    public ResponseEntity<PedidoResponseDTO> criar (@RequestBody @Valid PedidoCreateDTO dto){
+        PedidoResponseDTO  pedido = pedidoService.criar(dto);
         return  ResponseEntity.status(HttpStatus.CREATED).body(pedido);}
 
     @GetMapping
@@ -32,6 +33,7 @@ public class PedidoController {
     }
 
     @PatchMapping("/{id}/status")
-    public  Pedido atualizarStatus(@PathVariable Long id, @RequestBody PedidoStatusDTO dto){
-        return pedidoService.atualizarStatus(id, dto.getStatus());}
+    public PedidoResponseDTO atualizarStatus(@PathVariable Long id, @RequestBody PedidoStatusDTO dto){
+        return pedidoService.atualizarStatus(id, dto.getStatus());
+    }
 }
