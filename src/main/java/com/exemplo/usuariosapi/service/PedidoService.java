@@ -5,6 +5,7 @@ import com.exemplo.usuariosapi.dto.PedidoResponseDTO;
 import com.exemplo.usuariosapi.dto.UsuarioResumoDTO;
 import com.exemplo.usuariosapi.enums.StatusPedido;
 import com.exemplo.usuariosapi.exception.PedidoNaoEncontradoException;
+import com.exemplo.usuariosapi.exception.RegraNegocioException;
 import com.exemplo.usuariosapi.exception.UsuarioNaoEncontradoException;
 import com.exemplo.usuariosapi.model.Pedido;
 import com.exemplo.usuariosapi.model.Usuario;
@@ -54,11 +55,15 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO atualizarStatus(Long id, StatusPedido status){
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(()-> new PedidoNaoEncontradoException("Pedido não encontrado"));
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(()-> new PedidoNaoEncontradoException("Pedido não encontrado"));
 
+        if (!pedido.getStatus().podeAlterarPara(status)){
+            throw new RegraNegocioException(
+                    "Não é possivel alterar de "+ pedido.getStatus()+" para: "+status
+            );
+        }
         pedido.setStatus(status);
-
         return toDTO(pedidoRepository.save(pedido));
-
     }
 }
