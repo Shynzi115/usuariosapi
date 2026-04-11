@@ -8,7 +8,7 @@ public class PedidoCreateDTO {
     @NotBlank(message = "A descrição não pode ser vazia")
     private String descricao;
 
-    @NotNull()
+    @NotNull(message = "O usuário é obrigatório")
     private Long usuarioId;
 
     public String getDescricao() {
