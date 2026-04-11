@@ -1,8 +1,6 @@
 package com.exemplo.usuariosapi.controller;
 import com.exemplo.usuariosapi.dto.UsuarioCreateDTO;
-import com.exemplo.usuariosapi.dto.UsuarioDTO;
-import com.exemplo.usuariosapi.dto.UsuarioUpdateDTO;
-import com.exemplo.usuariosapi.model.Usuario;
+import com.exemplo.usuariosapi.dto.UsuarioResponseDTO;
 import com.exemplo.usuariosapi.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,18 +16,18 @@ public class UsuarioController {
     public UsuarioController(UsuarioService usuarioService){this.usuarioService = usuarioService;}
     //Get para listar todos os usuarios do banco, com paginação
     @GetMapping
-    public Page<Usuario> listar(@RequestParam(required = false) String nome, Pageable pageable) {
+    public Page<UsuarioResponseDTO> listar(@RequestParam(required = false) String nome, Pageable pageable) {
         return usuarioService.listar(nome, pageable);}
 
     //Busca de usuarios com GET e PathVariable para buscar por id
     @GetMapping("/{id}")
-    public Usuario buscarPorId(@PathVariable Long id){
+    public UsuarioResponseDTO buscarPorId(@PathVariable Long id){
         return usuarioService.buscarPorId(id);}
 
     //Post para inserir usuarios
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO dto){
-        UsuarioDTO usuario = usuarioService.criarUsuario(dto);
+    public ResponseEntity<UsuarioResponseDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO dto){
+        UsuarioResponseDTO usuario = usuarioService.criarUsuario(dto);
         return ResponseEntity.status(201).body(usuario);}
 
     //Deletar usuarios com DELETE
@@ -38,8 +36,8 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();}
 
     //Atualizar um usuario com id utilizando PathVariable
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizar (@Valid @PathVariable Long id, @RequestBody UsuarioUpdateDTO dto) {
-        UsuarioDTO usuario = usuarioService.atualizar(id, dto);
+    @PatchMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDTO> atualizar (@Valid @PathVariable Long id, @RequestBody UsuarioResponseDTO dto) {
+        UsuarioResponseDTO usuario = usuarioService.atualizar(id, dto);
         return ResponseEntity.ok(usuario);}
 }
