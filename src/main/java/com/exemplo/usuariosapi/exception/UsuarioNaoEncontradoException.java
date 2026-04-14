@@ -1,8 +1,15 @@
 package com.exemplo.usuariosapi.exception;
 
-public class UsuarioNaoEncontradoException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public UsuarioNaoEncontradoException(String message) {
-        super(message);
+public class UsuarioNaoEncontradoException extends BaseException {
+
+    public UsuarioNaoEncontradoException(Long id) {
+        super (
+                "USER_NOT_FOUND",
+                "Usuario com ID "+ id+ "não encontrado",
+                HttpStatus.NOT_FOUND
+        );
+
     }
 }

@@ -1,8 +1,14 @@
 package com.exemplo.usuariosapi.exception;
 
-public class PedidoNaoEncontradoException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public PedidoNaoEncontradoException(String message) {
-        super(message);
+public class PedidoNaoEncontradoException extends BaseException {
+
+    public PedidoNaoEncontradoException(Long id) {
+        super(
+                "ORDER_NOT_FOUND",
+                "Pedido com ID" +id+ " não encontrado",
+                HttpStatus.BAD_REQUEST
+        );
     }
 }

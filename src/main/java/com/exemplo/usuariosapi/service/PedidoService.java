@@ -38,8 +38,7 @@ public class PedidoService {
 
     public PedidoResponseDTO criar(PedidoCreateDTO dto){
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new UsuarioNaoEncontradoException(
-                        "Usuario "+ dto.getUsuarioId()+ " não encontrado."));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(dto.getUsuarioId()));
 
         Pedido pedido = new Pedido();
         pedido.setDescricao(dto.getDescricao());
@@ -56,13 +55,10 @@ public class PedidoService {
 
     public PedidoResponseDTO atualizarStatus(Long id, StatusPedido status){
         Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(()-> new PedidoNaoEncontradoException("Pedido não encontrado"));
+                .orElseThrow(()-> new PedidoNaoEncontradoException(id));
 
         if (!pedido.getStatus().podeAlterarPara(status)){
-            throw new RegraNegocioException(
-                    "Não é possivel alterar de "+ pedido.getStatus()+" para: "+status
-            );
-        }
+            throw new RegraNegocioException(id, status);}
         pedido.setStatus(status);
         return toDTO(pedidoRepository.save(pedido));
     }

@@ -38,7 +38,7 @@ public class UsuarioService {
     //Metodo de busca por id
     public UsuarioResponseDTO buscarPorId(Long id){
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() ->new UsuarioNaoEncontradoException("Usuario "+id+" não encontrado"));
+                .orElseThrow(() ->new UsuarioNaoEncontradoException(id));
         return toDTO(usuario);}
 
     public UsuarioResponseDTO criarUsuario(UsuarioCreateDTO dto){
@@ -52,13 +52,13 @@ public class UsuarioService {
 
     public void deletar(Long id){
 
-        if (!usuarioRepository.existsById(id)){throw new RuntimeException("Usuario não encontrado.");}
+        if (!usuarioRepository.existsById(id)){throw new UsuarioNaoEncontradoException(id);}
         usuarioRepository.deleteById(id);}
 
     public UsuarioResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioResponseDTO dto) {
         Usuario usuario = usuarioRepository
                 .findById(id)
-                .orElseThrow(() ->new UsuarioNaoEncontradoException("Usuario não encontrado."));
+                .orElseThrow(() ->new UsuarioNaoEncontradoException(id));
 
         if (dto.getId() != null){usuario.setId(dto.getId());}
         if (dto.getNome() != null){usuario.setNome(dto.getNome());}
